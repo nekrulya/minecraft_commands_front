@@ -1,4 +1,5 @@
 .table {
+  max-width: 800px;
 }
 
 .headings {
@@ -22,10 +23,23 @@
   border: 2px solid #fff;
   padding: 10px 15px;
 
+  text-align: center;
+  vertical-align: middle;
+
   position: relative;
 }
 
 .copy_icon {
   position: absolute;
   right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.delete_icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
 }

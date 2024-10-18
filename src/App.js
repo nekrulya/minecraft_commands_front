@@ -33,14 +33,14 @@ function App() {
       .catch((error) => {
         console.error('There was an error fetching the commands!', error);
       });
-  }, []);
+  }, [apiUrl, isModalOpen]);
 
   useEffect(() => {
     const token = localStorage.getItem('token'); // Получите токен из локального хранилища или где он хранится
     if (!isTokenExpired(token)) {
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [apiUrl]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -61,14 +61,18 @@ function App() {
               Add command
             </button>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <CommandForm />
+              <CommandForm onCreate={closeModal} />
             </Modal>
           </div>
         ) : (
-          <AuthForm username={username} setUsername={setUsername} />
+          <AuthForm
+            username={username}
+            setUsername={setUsername}
+            setIsLoggedIn={setIsLoggedIn}
+          />
         )}
       </header>
-      <CommandTable commands={commands} />
+      <CommandTable commands={commands} setCommands={setCommands} />
     </div>
   );
 }

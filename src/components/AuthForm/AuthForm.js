@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './AuthForm.module.css';
 
-const AuthForm = ({ username, setUsername }) => {
+const AuthForm = ({ username, setUsername, setIsLoggedIn }) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
       const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -25,6 +26,7 @@ const AuthForm = ({ username, setUsername }) => {
 
       // Сохраните JWT токен в локальном хранилище
       localStorage.setItem('token', response.data.access_token);
+      setIsLoggedIn(true);
     } catch (error) {
       console.error(
         'Login failed:',

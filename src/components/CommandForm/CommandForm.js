@@ -2,28 +2,31 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './CommandForm.module.css';
 
-const AuthForm = () => {
+const CommandForm = ({ onCreate }) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const token = localStorage.getItem('token');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   const createCommand = async (e) => {
     e.preventDefault();
-    const apiUrl = process.env.REACT_APP_API_URL;
+    console.log(apiUrl);
     try {
       const headers = {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       };
       const body = {
         name: name,
         description: description,
       };
-      const response = await axios({
+      await axios({
         headers: headers,
         method: 'post',
-        url: `${apiUrl}/command/create`,
+        url: `${apiUrl}/command`,
         data: body,
       });
-      console.log(response);
+      onCreate();
     } catch (error) {
       console.error(
         'Create command failed:',
@@ -57,4 +60,4 @@ const AuthForm = () => {
   );
 };
 
-export default AuthForm;
+export default CommandForm;

@@ -6,7 +6,7 @@ const Modal = ({ isOpen, onClose, children }) => {
 
   const handleOutsideClick = (event) => {
     // Проверяем, если кликнули вне модального окна
-    if (event.target.className === 'modal-overlay') {
+    if (event.target.className === styles.overlay) {
       onClose();
     }
   };
@@ -14,9 +14,6 @@ const Modal = ({ isOpen, onClose, children }) => {
   return (
     <div className={styles.overlay} onClick={handleOutsideClick}>
       <div className={styles.content}>
-        <button className={styles.close_button} onClick={onClose}>
-          &times; {/* Кнопка закрытия */}
-        </button>
         {children} {/* Контент модального окна */}
       </div>
     </div>
