@@ -1,0 +1,31 @@
+.table {
+}
+
+.headings {
+}
+
+.heading {
+  font-size: 28px;
+  border: 2px solid #fff;
+  padding: 10px 15px;
+}
+
+.headings:first-child {
+  width: 50%;
+}
+
+.cells {
+}
+
+.cell {
+  font-size: 24px;
+  border: 2px solid #fff;
+  padding: 10px 15px;
+
+  position: relative;
+}
+
+.copy_icon {
+  position: absolute;
+  right: 10px;
+}

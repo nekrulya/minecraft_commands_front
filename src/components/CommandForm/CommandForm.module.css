@@ -1,0 +1,13 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+}
+
+.description {
+}
+
+.create_btn {
+}
