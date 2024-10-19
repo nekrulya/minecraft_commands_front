@@ -50,6 +50,11 @@ function App() {
     setIsModalOpen(false);
   };
 
+  const handleLogOut = async () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+
   return (
     <div className="App">
       <header className="header">
@@ -59,6 +64,9 @@ function App() {
             <span>{username}</span>
             <button className="add_command_btn" onClick={openModal}>
               Add command
+            </button>
+            <button className="add_command_btn" onClick={handleLogOut}>
+              Log Out
             </button>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
               <CommandForm onCreate={closeModal} />
