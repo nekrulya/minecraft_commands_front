@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import './App.css';
 import CommandTable from './components/CommandTable/CommandTable';
 import AuthForm from './components/AuthForm/AuthForm';
 import Modal from './components/Modal/Modal';
 import CommandForm from './components/CommandForm/CommandForm';
+import NotificationCenter from './components/NotificationCenter/NotificationCenter';
 
 import { jwtDecode } from 'jwt-decode';
 
@@ -14,6 +15,16 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  const notificationReducer = (state, action) => {
+    switch (action.type) {
+      case 'ADD_NOTIFICATION':
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  };
+  const [notifications, dispatch] = useReducer(notificationReducer, []);
 
   const isTokenExpired = (token) => {
     if (!token) return true;
@@ -40,6 +51,21 @@ function App() {
     if (!isTokenExpired(token)) {
       setIsLoggedIn(true);
     }
+  }, [apiUrl]);
+
+  useEffect(() => {
+    const infoNotification = {
+      type: 'info',
+      message: 'hello!',
+      id: Date.now(),
+    };
+    dispatch({ type: 'ADD_NOTIFICATION', payload: infoNotification });
+    const errorNotification = {
+      type: 'error',
+      message: 'error!',
+      id: Date.now(),
+    };
+    dispatch({ type: 'ADD_NOTIFICATION', payload: errorNotification });
   }, [apiUrl]);
 
   const openModal = () => {
@@ -81,6 +107,7 @@ function App() {
         )}
       </header>
       <CommandTable commands={commands} setCommands={setCommands} />
+      <NotificationCenter notifications={notifications} />
     </div>
   );
 }
