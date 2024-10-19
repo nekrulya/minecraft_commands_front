@@ -34,12 +34,18 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
+
+  cursor: pointer;
+}
+
+.manage_btns {
+}
+
+.edit_icon {
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .delete_icon {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-
-  transform: translate(-50%, -50%);
+  cursor: pointer;
 }

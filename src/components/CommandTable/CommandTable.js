@@ -1,9 +1,10 @@
 import React from 'react';
-import { FaClipboard, FaTrash } from 'react-icons/fa'; // Используем react-icons для иконки копирования
-import styles from './CommandTable.module.css';
+import { FaClipboard, FaTrash, FaEdit } from 'react-icons/fa'; // Используем react-icons для иконки копирования
 import axios from 'axios';
+import classNames from 'classnames';
+import styles from './CommandTable.module.css';
 
-const CommandTable = ({ commands, setCommands }) => {
+const CommandTable = ({ commands, setCommands, addNotification }) => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem('token');
 
@@ -51,13 +52,16 @@ const CommandTable = ({ commands, setCommands }) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       };
-      await axios({
+      const response = await axios({
         headers: headers,
         method: 'delete',
         url: `${apiUrl}/command/${command_id}`,
       });
+      addNotification('info', response.data);
       fetchCommands();
     } catch (error) {
+      console.log(error);
+      addNotification('error', error.response.data.detail);
       console.error(
         'Delete command failed:',
         error.response ? error.response.data : error.message,
@@ -72,7 +76,7 @@ const CommandTable = ({ commands, setCommands }) => {
           <th className={styles.heading}>name</th>
           <th className={styles.heading}>command</th>
           <th className={styles.heading}>user</th>
-          <th className={styles.heading}>delete</th>
+          <th className={styles.heading}>manage</th>
         </tr>
       </thead>
       <tbody>
@@ -84,15 +88,14 @@ const CommandTable = ({ commands, setCommands }) => {
               <FaClipboard
                 className={styles.copy_icon}
                 onClick={() => handleCopy(command.description)}
-                style={{ cursor: 'pointer' }}
               />
             </td>
             <td className={styles.cell}>{command.created_by}</td>
-            <td className={styles.cell}>
+            <td className={classNames(styles.cell, styles.manage_btns)}>
+              <FaEdit className={styles.edit_icon} />
               <FaTrash
                 className={styles.delete_icon}
                 onClick={() => deleteCommand(command.id)}
-                style={{ cursor: 'pointer' }}
               />
             </td>
           </tr>

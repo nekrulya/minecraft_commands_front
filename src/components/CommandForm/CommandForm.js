@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './CommandForm.module.css';
 
-const CommandForm = ({ onCreate }) => {
+const CommandForm = ({ onCreate, addNotification }) => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem('token');
   const [name, setName] = useState('');
@@ -10,7 +10,6 @@ const CommandForm = ({ onCreate }) => {
 
   const createCommand = async (e) => {
     e.preventDefault();
-    console.log(apiUrl);
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -20,14 +19,16 @@ const CommandForm = ({ onCreate }) => {
         name: name,
         description: description,
       };
-      await axios({
+      const response = await axios({
         headers: headers,
         method: 'post',
         url: `${apiUrl}/command`,
         data: body,
       });
+      addNotification('info', response.data);
       onCreate();
     } catch (error) {
+      addNotification('error', error.response.data.detail);
       console.error(
         'Create command failed:',
         error.response ? error.response.data : error.message,

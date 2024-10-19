@@ -1,27 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import './App.css';
 import CommandTable from './components/CommandTable/CommandTable';
-import AuthForm from './components/AuthForm/AuthForm';
-import Modal from './components/Modal/Modal';
-import CommandForm from './components/CommandForm/CommandForm';
 import NotificationCenter from './components/NotificationCenter/NotificationCenter';
-
-import { jwtDecode } from 'jwt-decode';
+import Header from './components/Header/Header';
+import CommandForm from './components/CommandForm/CommandForm';
+import Modal from './components/Modal/Modal';
 
 function App() {
   const [commands, setCommands] = useState([]);
-  const [username, setUsername] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const isTokenExpired = (token) => {
-    if (!token) return true;
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    setUsername(decoded.username);
-    return decoded.exp < currentTime;
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -36,53 +33,63 @@ function App() {
       });
   }, [apiUrl, isModalOpen]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token'); // Получите токен из локального хранилища или где он хранится
-    if (!isTokenExpired(token)) {
-      setIsLoggedIn(true);
+  const notificationDuration = 3000;
+
+  const notificationReducer = (state, action) => {
+    switch (action.type) {
+      case 'ADD_NOTIFICATION':
+        return [...state, action.payload];
+      case 'REMOVE_OLD_NOTIFICATIONS':
+        const currentTime = Date.now();
+        return state.filter(
+          (notification) =>
+            currentTime - notification.created_at < notificationDuration,
+        );
+      default:
+        return state;
     }
-  }, [apiUrl]);
-
-  const openModal = () => {
-    setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const [notifications, dispatchNotification] = useReducer(
+    notificationReducer,
+    [],
+  );
+
+  // Функция для добавления уведомления
+  const addNotification = (type, message) => {
+    const newNotification = {
+      id: Date.now(),
+      type,
+      message,
+      created_at: Date.now(),
+    };
+    dispatchNotification({
+      type: 'ADD_NOTIFICATION',
+      payload: newNotification,
+    });
   };
 
-  const handleLogOut = async () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-  };
+  useEffect(() => {
+    // Удаляем устаревшие уведомления каждые 500 мс
+    const timer = setInterval(() => {
+      dispatchNotification({ type: 'REMOVE_OLD_NOTIFICATIONS' });
+    }, 500);
+
+    return () => clearInterval(timer); // Очищаем таймер при размонтировании компонента
+  }, []);
 
   return (
     <div className="App">
-      <header className="header">
-        <h1 className="main_title">List of Commands</h1>
-        {isLoggedIn ? (
-          <div className="header_username">
-            <span>{username}</span>
-            <button className="add_command_btn" onClick={openModal}>
-              Add command
-            </button>
-            <button className="add_command_btn" onClick={handleLogOut}>
-              Log Out
-            </button>
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <CommandForm onCreate={closeModal} />
-            </Modal>
-          </div>
-        ) : (
-          <AuthForm
-            username={username}
-            setUsername={setUsername}
-            setIsLoggedIn={setIsLoggedIn}
-          />
-        )}
-      </header>
-      <CommandTable commands={commands} setCommands={setCommands} />
-      <NotificationCenter />
+      <Header addNotification={addNotification} openModal={openModal} />
+      <CommandTable
+        commands={commands}
+        setCommands={setCommands}
+        addNotification={addNotification}
+      />
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <CommandForm onCreate={closeModal} addNotification={addNotification} />
+      </Modal>
+      <NotificationCenter notifications={notifications} />
     </div>
   );
 }

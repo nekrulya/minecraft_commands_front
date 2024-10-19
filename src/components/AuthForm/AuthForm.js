@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './AuthForm.module.css';
 
-const AuthForm = ({ username, setUsername, setIsLoggedIn }) => {
+const AuthForm = ({
+  username,
+  setUsername,
+  setIsLoggedIn,
+  addNotification,
+}) => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const [password, setPassword] = useState('');
-  const [formError, setFormError] = useState('');
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -29,9 +33,8 @@ const AuthForm = ({ username, setUsername, setIsLoggedIn }) => {
       // JWT токен в локальном хранилище
       localStorage.setItem('token', response.data.access_token);
       setIsLoggedIn(true);
-      setFormError('');
     } catch (error) {
-      setFormError(error.response.data.detail);
+      addNotification('error', error.response.data.detail);
       console.error(
         'Login failed:',
         error.response ? error.response.data.detail : error.message,
@@ -59,7 +62,6 @@ const AuthForm = ({ username, setUsername, setIsLoggedIn }) => {
       });
       handleSignIn(e);
     } catch (error) {
-      setFormError(error.response.data.detail);
       console.error(
         'Registration failed:',
         error.response ? error.response.data : error.message,
@@ -101,7 +103,6 @@ const AuthForm = ({ username, setUsername, setIsLoggedIn }) => {
           Sign In
         </button>
       </div>
-      <p className={formError ? styles.error_text : {}}>{formError}</p>
     </form>
   );
 };
