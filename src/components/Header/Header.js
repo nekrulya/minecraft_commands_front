@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import classes from './Header.module.css';
 import AuthForm from '../AuthForm/AuthForm';
 
 const Header = ({ addNotification, openModal }) => {
@@ -29,15 +30,15 @@ const Header = ({ addNotification, openModal }) => {
   }, [apiUrl]);
 
   return (
-    <header className="header">
-      <h1 className="main_title">List of Commands</h1>
+    <header className={classes.header}>
+      <h1 className={classes.title}>List of Commands</h1>
       {isLoggedIn ? (
-        <div className="header_username">
+        <div className={classes.username}>
           <span>{username}</span>
-          <button className="add_command_btn" onClick={openModal}>
+          <button className={classes.btn} onClick={openModal}>
             Add command
           </button>
-          <button className="add_command_btn" onClick={handleLogOut}>
+          <button className={classes.btn} onClick={handleLogOut}>
             Log Out
           </button>
         </div>

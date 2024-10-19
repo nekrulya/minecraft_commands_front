@@ -2,9 +2,14 @@ import React from 'react';
 import { FaClipboard, FaTrash, FaEdit } from 'react-icons/fa'; // Используем react-icons для иконки копирования
 import axios from 'axios';
 import classNames from 'classnames';
-import styles from './CommandTable.module.css';
+import classes from './CommandTable.module.css';
 
-const CommandTable = ({ commands, setCommands, addNotification }) => {
+const CommandTable = ({
+  commands,
+  setCommands,
+  addNotification,
+  openModal,
+}) => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem('token');
 
@@ -69,32 +74,42 @@ const CommandTable = ({ commands, setCommands, addNotification }) => {
     }
   };
 
+  const editCommand = async (commandId) => {
+    localStorage.setItem('commandId', commandId);
+    openModal();
+  };
+
   return (
-    <table className={styles.table}>
+    <table className={classes.table}>
       <thead>
-        <tr className={styles.heading}>
-          <th className={styles.heading}>name</th>
-          <th className={styles.heading}>command</th>
-          <th className={styles.heading}>user</th>
-          <th className={styles.heading}>manage</th>
+        <tr className={classes.heading}>
+          <th className={classes.heading}>name</th>
+          <th className={classes.heading}>command</th>
+          <th className={classes.heading}>user</th>
+          <th className={classes.heading}>manage</th>
         </tr>
       </thead>
       <tbody>
         {commands.map((command) => (
-          <tr className={styles.cells} key={command.id}>
-            <td className={styles.cell}>{command.name}</td>
-            <td className={styles.cell} style={{ paddingRight: '35px' }}>
+          <tr className={classes.cells} key={command.id}>
+            <td className={classes.cell}>{command.name}</td>
+            <td className={classes.cell} style={{ paddingRight: '35px' }}>
               {command.description}
               <FaClipboard
-                className={styles.copy_icon}
+                className={classes.copy_icon}
                 onClick={() => handleCopy(command.description)}
               />
             </td>
-            <td className={styles.cell}>{command.created_by}</td>
-            <td className={classNames(styles.cell, styles.manage_btns)}>
-              <FaEdit className={styles.edit_icon} />
+            <td className={classes.cell}>{command.created_by}</td>
+            <td className={classNames(classes.cell, classes.manage_btns)}>
+              <FaEdit
+                className={classes.edit_icon}
+                onClick={() => {
+                  editCommand(command.id);
+                }}
+              />
               <FaTrash
-                className={styles.delete_icon}
+                className={classes.delete_icon}
                 onClick={() => deleteCommand(command.id)}
               />
             </td>

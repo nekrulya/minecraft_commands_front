@@ -85,6 +85,7 @@ function App() {
         commands={commands}
         setCommands={setCommands}
         addNotification={addNotification}
+        openModal={openModal}
       />
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <CommandForm onCreate={closeModal} addNotification={addNotification} />

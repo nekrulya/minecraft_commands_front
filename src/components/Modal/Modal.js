@@ -1,19 +1,19 @@
 import React from 'react';
-import styles from './Modal.module.css';
+import classes from './Modal.module.css';
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null; // Не отображаем модал, если он закрыт
 
   const handleOutsideClick = (event) => {
     // Проверяем, если кликнули вне модального окна
-    if (event.target.className === styles.overlay) {
+    if (event.target.className === classes.overlay) {
       onClose();
     }
   };
 
   return (
-    <div className={styles.overlay} onClick={handleOutsideClick}>
-      <div className={styles.content}>
+    <div className={classes.overlay} onClick={handleOutsideClick}>
+      <div className={classes.content}>
         {children} {/* Контент модального окна */}
       </div>
     </div>

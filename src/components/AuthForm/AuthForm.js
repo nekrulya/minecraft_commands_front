@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import styles from './AuthForm.module.css';
+import classes from './AuthForm.module.css';
 
 const AuthForm = ({
   username,
@@ -70,10 +70,10 @@ const AuthForm = ({
   };
 
   return (
-    <form className={styles.form}>
+    <form className={classes.form}>
       <input
         type="text"
-        className={styles.username}
+        className={classes.username}
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -81,22 +81,22 @@ const AuthForm = ({
       />
       <input
         type="password"
-        className={styles.password}
+        className={classes.password}
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <div className={styles.btns}>
+      <div className={classes.btns}>
         <button
-          className={styles.login_btn}
+          className={classes.login_btn}
           type="submit"
           onClick={handleSignUp}
         >
           Sign Up
         </button>
         <button
-          className={styles.login_btn}
+          className={classes.login_btn}
           type="submit"
           onClick={handleSignIn}
         >
