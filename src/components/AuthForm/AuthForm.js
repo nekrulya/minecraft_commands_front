@@ -62,6 +62,7 @@ const AuthForm = ({
       });
       handleSignIn(e);
     } catch (error) {
+      addNotification('error', error.response.data.detail);
       console.error(
         'Registration failed:',
         error.response ? error.response.data : error.message,

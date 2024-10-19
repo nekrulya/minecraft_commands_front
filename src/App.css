@@ -1,8 +1,6 @@
 @import url(./reset.css);
 
 .App {
-  height: 100vh;
-
   display: flex;
   justify-content: start;
   align-items: center;
