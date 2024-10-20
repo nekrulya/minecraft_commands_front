@@ -3,13 +3,13 @@ import axios from 'axios';
 import classes from './CommandForm.module.css';
 
 const CommandForm = ({ onCreate, addNotification }) => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
     const getCommand = async () => {
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const token = localStorage.getItem('token');
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -29,9 +29,11 @@ const CommandForm = ({ onCreate, addNotification }) => {
       setDescription(response.data.description);
     };
     getCommand();
-  }, [apiUrl, token]);
+  }, []);
 
   const createCommand = async () => {
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token');
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -47,7 +49,6 @@ const CommandForm = ({ onCreate, addNotification }) => {
         url: `${apiUrl}/command`,
         data: body,
       });
-      console.log(response.data.name);
       addNotification(
         'info',
         `Command ${response.data.name} created successfully`,
@@ -64,6 +65,8 @@ const CommandForm = ({ onCreate, addNotification }) => {
   };
 
   const editCommand = async (commandId) => {
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token');
     try {
       const headers = {
         'Content-Type': 'application/json',

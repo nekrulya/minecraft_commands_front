@@ -11,8 +11,6 @@ function App() {
   const [commands, setCommands] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -22,6 +20,7 @@ function App() {
   };
 
   useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_URL;
     // Запрос к FastAPI
     axios
       .get(`${apiUrl}/command`)
@@ -32,7 +31,7 @@ function App() {
         addNotification('error', error.response.data.detail);
         console.error('There was an error fetching the commands!', error);
       });
-  }, [apiUrl, isModalOpen]);
+  }, [isModalOpen]);
 
   const notificationDuration = 3000;
 

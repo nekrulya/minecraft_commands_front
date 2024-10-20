@@ -29,13 +29,18 @@ const Header = ({ addNotification, openModal }) => {
     }
   }, [apiUrl]);
 
+  const addCommand = () => {
+    localStorage.removeItem('commandId');
+    openModal();
+  };
+
   return (
     <header className={classes.header}>
       <h1 className={classes.title}>List of Commands</h1>
       {isLoggedIn ? (
         <div className={classes.username}>
           <span>{username}</span>
-          <button className={classes.btn} onClick={openModal}>
+          <button className={classes.btn} onClick={addCommand}>
             Add command
           </button>
           <button className={classes.btn} onClick={handleLogOut}>
