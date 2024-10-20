@@ -29,6 +29,7 @@ function App() {
         setCommands(response.data);
       })
       .catch((error) => {
+        addNotification('error', error.response.data.detail);
         console.error('There was an error fetching the commands!', error);
       });
   }, [apiUrl, isModalOpen]);
@@ -57,6 +58,9 @@ function App() {
 
   // Функция для добавления уведомления
   const addNotification = (type, message) => {
+    if (type === 'error' && typeof message !== 'string') {
+      message = message[0].msg;
+    }
     const newNotification = {
       id: Date.now(),
       type,

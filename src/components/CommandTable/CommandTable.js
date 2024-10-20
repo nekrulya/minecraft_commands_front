@@ -62,7 +62,10 @@ const CommandTable = ({
         method: 'delete',
         url: `${apiUrl}/command/${command_id}`,
       });
-      addNotification('info', response.data);
+      addNotification(
+        'info',
+        `Command ${response.data.name} deleted successfully`,
+      );
       fetchCommands();
     } catch (error) {
       console.log(error);

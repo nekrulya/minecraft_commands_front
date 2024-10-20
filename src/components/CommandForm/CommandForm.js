@@ -47,9 +47,14 @@ const CommandForm = ({ onCreate, addNotification }) => {
         url: `${apiUrl}/command`,
         data: body,
       });
-      addNotification('info', response.data);
+      console.log(response.data.name);
+      addNotification(
+        'info',
+        `Command ${response.data.name} created successfully`,
+      );
       onCreate();
     } catch (error) {
+      console.log(error);
       addNotification('error', error.response.data.detail);
       console.error(
         'Create command failed:',
@@ -74,7 +79,10 @@ const CommandForm = ({ onCreate, addNotification }) => {
         url: `${apiUrl}/command/${commandId}`,
         data: body,
       });
-      addNotification('info', response.data);
+      addNotification(
+        'info',
+        `Command ${response.data.name} updated successfully`,
+      );
       localStorage.removeItem('commandId');
       onCreate();
     } catch (error) {
@@ -101,8 +109,8 @@ const CommandForm = ({ onCreate, addNotification }) => {
       <input
         type="text"
         className={classes.name}
-        placeholder="Name"
-        value={name}
+        placeholder="name"
+        value={name || ''}
         onChange={(e) => setName(e.target.value)}
         required
       />
@@ -110,7 +118,7 @@ const CommandForm = ({ onCreate, addNotification }) => {
         type="text"
         className={classes.description}
         placeholder="command"
-        value={description}
+        value={description || ''}
         onChange={(e) => setDescription(e.target.value)}
         required
       />
