@@ -95,8 +95,13 @@ const CommandTable = ({
       <tbody>
         {commands.map((command) => (
           <tr className={classes.cells} key={command.id}>
-            <td className={classes.cell}>{command.name}</td>
-            <td className={classes.cell} style={{ paddingRight: '35px' }}>
+            <td className={classNames(classes.cell, classes.cell_break_word)}>
+              {command.name}
+            </td>
+            <td
+              className={classNames(classes.cell, classes.cell_break_word)}
+              style={{ paddingRight: '35px' }}
+            >
               {command.description}
               <FaClipboard
                 className={classes.copy_icon}

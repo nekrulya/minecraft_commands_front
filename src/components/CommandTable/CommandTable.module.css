@@ -29,6 +29,10 @@
   position: relative;
 }
 
+.cell_break_word {
+  word-break: break-word;
+}
+
 .copy_icon {
   position: absolute;
   right: 10px;
