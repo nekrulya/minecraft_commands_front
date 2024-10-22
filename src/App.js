@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import './App.css';
-import CommandTable from './components/CommandTable/CommandTable';
 import NotificationCenter from './components/NotificationCenter/NotificationCenter';
 import Header from './components/Header/Header';
-import CommandForm from './components/CommandForm/CommandForm';
+import CommandTable from './components/CommandTable/CommandTable';
 import Modal from './components/Modal/Modal';
+import CommandForm from './components/CommandForm/CommandForm';
 
 function App() {
   const [commands, setCommands] = useState([]);
@@ -83,7 +83,12 @@ function App() {
 
   return (
     <div className="App">
-      <Header addNotification={addNotification} openModal={openModal} />
+      <Header
+        addNotification={addNotification}
+        openModal={openModal}
+        setCommands={setCommands}
+      />
+
       <CommandTable
         commands={commands}
         setCommands={setCommands}

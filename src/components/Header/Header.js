@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import classes from './Header.module.css';
 import AuthForm from '../AuthForm/AuthForm';
+import CommandsSelect from '../CommandsSelect/CommandsSelect';
 
-const Header = ({ addNotification, openModal }) => {
+const Header = ({ addNotification, openModal, setCommands }) => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [username, setUsername] = useState('');
@@ -55,6 +56,11 @@ const Header = ({ addNotification, openModal }) => {
           addNotification={addNotification}
         />
       )}
+      <CommandsSelect
+        username={username}
+        setCommands={setCommands}
+        addNotification={addNotification}
+      ></CommandsSelect>
     </header>
   );
 };
