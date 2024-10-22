@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import classes from './Header.module.css';
 import AuthForm from '../AuthForm/AuthForm';
 import CommandsSelect from '../CommandsSelect/CommandsSelect';
+import axios from 'axios';
 
 const Header = ({ addNotification, openModal, setCommands }) => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -35,6 +36,49 @@ const Header = ({ addNotification, openModal, setCommands }) => {
     openModal();
   };
 
+  const handleCopy = (text) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          console.log('Copied to clipboard!');
+        })
+        .catch((err) => {
+          console.error('Failed to copy text: ', err);
+        });
+    } else {
+      // Фолбэк для старых браузеров
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        console.log('Copied to clipboard!');
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  const handleDownload = async () => {
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios({
+      headers: headers,
+      method: 'get',
+      url: `${apiUrl}/command/file`,
+    });
+    handleCopy(response.data);
+    addNotification('info', 'Commands copied to clipboard');
+  };
+
   return (
     <header className={classes.header}>
       <h1 className={classes.title}>List of Commands</h1>
@@ -46,6 +90,9 @@ const Header = ({ addNotification, openModal, setCommands }) => {
           </button>
           <button className={classes.btn} onClick={handleLogOut}>
             Log Out
+          </button>
+          <button className={classes.btn} onClick={handleDownload}>
+            copy commands
           </button>
         </div>
       ) : (
